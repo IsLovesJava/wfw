@@ -52,5 +52,10 @@
             <artifactId>wfw-utils</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.pkx</groupId>
+            <artifactId>mq</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>
