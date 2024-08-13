@@ -1,12 +1,16 @@
 package cn.pkx.wfw.controller;
 
-import cn.pkx.wfw.mq.RocketMqHelper;
 import cn.pkx.wfw.utils.UUIDUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+
+@Slf4j
 @RestController
 public class ControllerA {
 
@@ -14,11 +18,21 @@ public class ControllerA {
     private int port;
 
     @Autowired
-    RocketMqHelper rocketMqHelper;
+    DefaultMQProducer mqProducer;
 
     @GetMapping("/a/m1")
     public String m1() {
-        rocketMqHelper.asyncSend("wfw", MessageBuilder.withPayload("mq-/a/m1").build());
+        Message msg = new Message();
+        msg.setTopic("wfw");
+        msg.setTags("default");
+        msg.setInstanceId("controllerA");
+        msg.setBody("mq-/a/m1".getBytes(StandardCharsets.UTF_8));
+        try {
+            mqProducer.send(msg);
+            log.error("send message success");
+        } catch (Exception e) {
+            log.error("send message error", e);
+        }
         return UUIDUtils.get() + "-ControllerA#m1:" + port;
     }
 
