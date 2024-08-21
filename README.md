@@ -1,7 +1,6 @@
 ## 微服务DEMO
 
 ### NACOS
-
 - 安装运行
   - 下载启动 https://nacos.io/docs/latest/quickstart/quick-start/
   - ./bin/startup.cmd -m standalone
@@ -9,20 +8,30 @@
 - spring集成
   - 引入依赖 spring-cloud-starter-alibaba-nacos-discovery
   - 添加配置
-    - spring.application.name=serviceB
-    - spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
-    - 启动类添加注解 @EnableDiscoveryClient
+    - ```properties
+      spring.application.name=serviceB
+      spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
+      ```
+    - 启动类添加注解  @EnableDiscoveryClient 
 - 原理
-  - ...
+  - AbstractAutoServiceRegistration#register启动时注册rpc链接 RpcClient 
 
 ### FEIGN
-
 - spring集成
-  - 引入依赖 spring-cloud-starter-openfeign；spring-cloud-starter-loadbalancer 
+  - 引入依赖 spring-cloud-starter-openfeign;spring-cloud-starter-loadbalancer 
   - 添加配置
     - 启动类添加注解 @EnableFeignClients
-  - 添加接口，使用注解@FeignClient(value = "${serviceName}")
-  - 添加方法，使用注解@GetMapping("uri")指向服务提供方的接口
+  - 添加接口
+    - ```java
+      import org.springframework.cloud.openfeign.FeignClient;
+      import org.springframework.web.bind.annotation.GetMapping;
+  
+      @FeignClient(value = "serviceA")
+      public interface ServiceA {
+          @GetMapping("/a/m1")
+          String m1();
+      }
+      ```
 - 原理
   - @FeignClient声明的接口会使用动态代理生成Bean，注册在Spring以供使用,ReflectiveFeign#newInstance()
   - Bean的方法执行会由动态代理方法实现，实际执行为发送http请求,服务提供方的IP端口由服务发现提供,FeignBlockingLoadBalancerClient#execute()
@@ -37,10 +46,10 @@
     - 启动nameServer ./bin/mqnamesrv
     - 启动broker ./bin/mqbroker -n localhost:9876
 - spring集成
-  - 引入依赖 rocketmq-client；rocketmq-common
+  - 引入依赖 rocketmq-client;rocketmq-common
   - 添加配置
-    - 生产者 groupName；instanceName；namesrvAddr；maxMessageSize；sendMsgTimeout；retryTimesWhenSendFailed
-    - 消费者 groupName；topic；instanceName；namesrvAddr；cousumeThreadMin
+    - 生产者 groupName;instanceName;namesrvAddr;maxMessageSize;sendMsgTimeout;retryTimesWhenSendFailed
+    - 消费者 groupName;topic;instanceName;namesrvAddr;cousumeThreadMin
   - 注册Bean
-    - 生产者 DefaultMQProducer，设置各项配置，调用start方法，MQProducerConfig
-    - 消费者 DefaultMQPushConsumer，设置各项配置，订阅指定的topic，调用start方法，MQConsumerConfig
+    - 生产者 DefaultMQProducer，设置各项配置，调用start方法。例：MQProducerConfig
+    - 消费者 DefaultMQPushConsumer，设置各项配置，订阅指定的topic，调用start方法。例：MQConsumerConfig

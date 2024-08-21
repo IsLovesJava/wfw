@@ -18,7 +18,7 @@ public class MyBeanUtils implements ApplicationContextAware, SmartInitializingSi
     @Override
     public void afterSingletonsInstantiated() {
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(MyAnnotation.class);
-        System.out.println(beansWithAnnotation);
+        System.out.println("bean with MyAnnotation:"+beansWithAnnotation);
     }
 
     @Override
