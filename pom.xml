@@ -23,6 +23,7 @@
         <module>consumer</module>
         <module>mq</module>
         <module>z-normal</module>
+        <module>gateway</module>
     </modules>
 
     <properties>

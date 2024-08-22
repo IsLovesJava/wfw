@@ -14,32 +14,39 @@ public class ControllerA {
 
     @Value("${server.port}")
     private int port;
+    @Value("${config.s1:null}")
+    private String s1;
 
     @Autowired
     DefaultMQProducer mqProducer;
 
     @GetMapping("/a/m1")
     public String m1() {
-        Message msg = new Message();
-        msg.setTopic("wfw");
-        msg.setTags("default");
-        msg.setInstanceId("controllerA");
-        msg.setBody("---------message-----------A".getBytes());
+        System.out.println("--config.s1--" + s1);
+        return UUIDUtils.get() + "-ControllerA#m1:" + port;
+    }
 
-        try {
-            mqProducer.send(msg);
-            log.error("send message success");
-        } catch (Exception e) {
-            log.error("send message error", e);
-        }
+    @GetMapping("/a/random/error")
+    public String randomError() {
         if (Math.random() > 0.5) {
             throw new RuntimeException("random");
         }
         return UUIDUtils.get() + "-ControllerA#m1:" + port;
     }
 
-    @RequestMapping(value = "/echo/{string}", method = RequestMethod.GET)
-    public String echo(@PathVariable String string) {
-        return "Hello Nacos Discovery " + string;
+    @GetMapping("/a/send1")
+    public String send1() {
+        Message msg = new Message();
+        msg.setTopic("wfw");
+        msg.setTags("default");
+        msg.setInstanceId("controllerA");
+        msg.setBody("---------message-----------A".getBytes());
+        try {
+            mqProducer.send(msg);
+            return "send message success";
+        } catch (Exception e) {
+            log.error("send message error", e);
+            return "send message error";
+        }
     }
 }

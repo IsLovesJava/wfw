@@ -1,0 +1,18 @@
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="glmapper-name" value="glmapper-demo" />
+    <contextName>${glmapper-name}</contextName>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-mm-dd HH:mm:ss.SSS} %-5level %logger{80}.%method[%line] - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+<!--    <logger>-->
+<!--        //xxxx-->
+<!--    </logger>-->
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

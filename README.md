@@ -53,3 +53,14 @@
   - 注册Bean
     - 生产者 DefaultMQProducer，设置各项配置，调用start方法。例：MQProducerConfig
     - 消费者 DefaultMQPushConsumer，设置各项配置，订阅指定的topic，调用start方法。例：MQConsumerConfig
+### Sentinel
+- 文档
+  - 官方文档 https://sentinelguard.io/zh-cn/docs/introduction.html
+  - spring cloud 体系 https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel
+- feign集成，使用spring-cloud-starter-openfeign
+  - 引入依赖，spring-cloud-starter-alibaba-sentinel
+  - feign接口注解添加降级实现类@FeignClient(value = "serviceA",fallback = ServiceAFallback.class)
+  - ServiceAFallback实现serviceA接口，并为各个方法实现降级处理
+- 原理
+  - Sentinel实现Feign.Builder,重写动态代理实现，使用SentinelInvocationHandler，补充降级处理逻辑，SentinelFeign#internalBuild#create
+  - feign方法执行发生异常时，捕获异常，执行指定的降级方法，SentinelInvocationHandler#invoke
