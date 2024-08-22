@@ -3,18 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
     <parent>
         <groupId>cn.pkx</groupId>
         <artifactId>wfw</artifactId>
         <version>1.0</version>
     </parent>
 
-    <artifactId>consumer</artifactId>
-
-    <modules>
-        <module>consumer-b</module>
-    </modules>
+    <artifactId>gateway</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -23,40 +18,36 @@
     </properties>
 
     <dependencies>
+        <!-- SpringCloud Gateway -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
-
+        <!-- SpringCloud Alibaba Nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
+        <!-- SpringCloud Alibaba Nacos Config -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
+        <!-- 注册中心 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 
+        <!-- 负载均衡 使用lb://配置路由需引入 -->
         <dependency>
-            <groupId>cn.pkx</groupId>
-            <artifactId>wfw-utils</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.pkx</groupId>
-            <artifactId>mq</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
     </dependencies>
+
 </project>

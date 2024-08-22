@@ -14,6 +14,11 @@ public class ControllerB {
 
     @GetMapping("/b/m1")
     public String m1() {
-        return UUIDUtils.get() + "-ControllerA#m1 " + " call " + serviceA.m1();
+        return UUIDUtils.get() + "-ControllerA#m1 " + " call serviceA:" + serviceA.m1();
+    }
+
+    @GetMapping("/b/random/error")
+    public String randomError() {
+        return UUIDUtils.get() + "-ControllerA#randomError " + " call serviceA:" + serviceA.randomError();
     }
 }

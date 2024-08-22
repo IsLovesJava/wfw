@@ -25,22 +25,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.2.8</version>
         </dependency>
         <dependency>
-            <groupId>cn.pkx</groupId>
-            <artifactId>wfw-utils</artifactId>
-            <version>1.0</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>${nacos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.pkx</groupId>
+            <artifactId>wfw-utils</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.pkx</groupId>
             <artifactId>mq</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
