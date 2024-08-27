@@ -1,5 +1,38 @@
 ## 微服务DEMO
 
+### Windows编译项目
+- chcp 65001  CMD/power shell设置UTF-8编码
+  - chcp 437  CMD/power shell设置默认编码
+- set JAVA_HOME=C:\java\jdk-21.0.2 CMD指定jdk版本
+- $env:JAVA_HOME = "C:\java\jdk-21.0.2" power shell指定jdk版本
+- mvn clean package -P consumers
+
+### 运行项目
+- java -jar consumer-b-1.0.jar --rocketmq.consumer.namesrvAddr=192.168.3.28:9876
+- 参数--X.Y.Z=xxx 设置spring参数
+
+### docker安装
+- linux机器（需联网），版本 CentOS Linux release 7.9.2009 (Core)
+- 配置yum
+  - 由于7.9版本不再维护，yum将7.9视为归档版本，无法直接访问默认镜像网址，需要修改镜像网址
+  - 修改 vi /etc/yum.repos.d/CentOS-Base.repo，注释停用mirrorlist项，启用baseurl
+  - 修改各项baseurl，设值为baseurl=http://vault.centos.org/centos/7.9.2009/os/$basearch/
+  - 安装工具 yum install -y yum-utils device-mapper-persistent-data lvm2
+  - 设置国内镜像源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+  - 刷新缓存 yum makecache fast 
+- 安装社区版 docker yum -y install docker-ce
+- 安装完成，若拉取镜像缓慢，可修改/etc/docker/daemon.json，设置容器镜像加速，保存后重启docker
+- ```json
+  {
+    "registry-mirrors": [
+      "https://gallery.ecr.aws/",
+      "https://docker.lmirror.top",
+      "https://atomhub.openatom.cn/"
+    ]
+  }
+  ```
+- 
+
 ### NACOS
 - 安装运行
   - 下载启动 https://nacos.io/docs/latest/quickstart/quick-start/

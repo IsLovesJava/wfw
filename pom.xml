@@ -17,14 +17,33 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>provider</module>
-        <module>wfw-utils</module>
-        <module>consumer</module>
-        <module>mq</module>
-        <module>z-normal</module>
-        <module>gateway</module>
-    </modules>
+
+    <profiles>
+
+        <profile>
+            <id>all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>provider</module>
+                <module>wfw-utils</module>
+                <module>consumer</module>
+                <module>mq</module>
+                <module>z-normal</module>
+                <module>gateway</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>consumers</id>
+            <modules>
+                <module>wfw-utils</module>
+                <module>mq</module>
+                <module>consumer</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

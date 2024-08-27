@@ -1,12 +1,12 @@
-#rocketmq配置
-rocketmq:
-  nameServer: 127.0.0.1:9876
-  # 生产者配置
-  consumer:
-    topic: wfw
-    group: wfw-rocketmq-group
-    groupName: wfw-rocketmq-group
-    instanceName: consumer1
-    # 服务地址
-    namesrvAddr: 127.0.0.1:9876
-    cousumeThreadMin: 2
+#rocketmq配置 使用Nacos配置中心
+#rocketmq:
+#  nameServer: 127.0.0.1:9876
+#  # 生产者配置
+#  consumer:
+#    topic: wfw
+#    group: wfw-rocketmq-group
+#    groupName: wfw-rocketmq-group
+#    instanceName: consumer1
+#    # 服务地址
+#    namesrvAddr: 127.0.0.1:9876
+#    cousumeThreadMin: 2
