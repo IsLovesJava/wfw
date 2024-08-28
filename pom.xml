@@ -16,7 +16,8 @@
     <artifactId>wfw</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
-
+    <modules>
+    </modules>
 
     <profiles>
 
@@ -32,6 +33,7 @@
                 <module>mq</module>
                 <module>z-normal</module>
                 <module>gateway</module>
+                <module>consul-a</module>
             </modules>
         </profile>
 
@@ -63,12 +65,6 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-databind</artifactId>-->
-<!--            <version>${jacson.version}</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

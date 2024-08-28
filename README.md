@@ -10,8 +10,10 @@
 ### 运行项目
 - java -jar consumer-b-1.0.jar --rocketmq.consumer.namesrvAddr=192.168.3.28:9876
 - 参数--X.Y.Z=xxx 设置spring参数
+- java -jar /software/java-projects/consumer-b-1.0.jar > output.log 2>&1 &
 
 ### docker安装
+- 参考文档 https://juejin.cn/post/7154437479955693598
 - linux机器（需联网），版本 CentOS Linux release 7.9.2009 (Core)
 - 配置yum
   - 由于7.9版本不再维护，yum将7.9视为归档版本，无法直接访问默认镜像网址，需要修改镜像网址
@@ -31,7 +33,27 @@
     ]
   }
   ```
-- 
+- 制作jar程序镜像
+  - 编写dockerfile，同一目录下放入jdk-21_linux-x64_bin.tar.gz，consumer-b-1.0.jar
+  - ```dockerfile
+    FROM centos:centos7.9.2009
+    ADD jdk-21_linux-x64_bin.tar.gz /java/
+    ADD consumer-b-1.0.jar /java/
+    ENV JAVA_HOME /java/jdk-21.0.4
+    ENV CLASSPATH .:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar
+    EXPOSE 18082
+    CMD ["/java/jdk-21.0.4/bin/java","-jar","/java/consumer-b-1.0.jar"]
+    ```
+  - dockerfile所在目录执行 
+  - ```shell
+    docker build -t serviceB:latest .
+    ```
+- 启动容器
+  - ```shell
+    docker run --name=svb1 svb > /tmp/logs/svb1.out 2>&1 &
+    docker run -p 12080:18082 --name=serviceB-1 serviceB > /tmp/logs/serviceB-1-12080.out 2>&1 &
+    docker run -p 12081:18082 --name=serviceB-2 serviceB > /tmp/logs/serviceB-1-12081.out 2>&1 &
+    ```
 
 ### NACOS
 - 安装运行
@@ -46,8 +68,30 @@
       spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
       ```
     - 启动类添加注解  @EnableDiscoveryClient 
-- 原理
-  - AbstractAutoServiceRegistration#register启动时注册rpc链接 RpcClient 
+- 服务注册原理
+  - NacosServiceRegistryAutoConfiguration#nacosAutoServiceRegistration启动注册事件监听Bean
+  - 事件触发NacosAutoServiceRegistration#onApplicationEvent(WebServerInitializedEvent)->start()->register()->
+  - NacosServiceRegistry#register()->NacosServiceRegistry#registerInstance()->NamingGrpcClientProxy#registerServiceForEphemeral()
+  - 通过gRPC请求注册服务
+
+### Consul
+- 安装运行
+  - 官网下载 https://developer.hashicorp.com/consul/install
+  - windows平台：解压，执行 consul agent -dev
+  - 打开管理页面 http://localhost:8500/
+- spring集成
+  - 引入依赖 spring-cloud-starter-consul-discovery
+  - 添加配置
+    - ```properties
+      spring.cloud.consul.discovery.service-name=consul-a
+      spring.cloud.consul.host=127.0.0.1
+      spring.cloud.consul.port=8500
+      ```
+    - 启动类添加注解  @EnableDiscoveryClient
+- 服务注册原理
+  - ConsulAutoServiceRegistrationListener监听程序启动
+  - 事件触发ConsulAutoServiceRegistration#start()->register()->ConsulServiceRegistry#register()
+  ->AgentConsulClient#agentServiceRegister(),发送http请求注册服务
 
 ### FEIGN
 - spring集成
@@ -86,6 +130,7 @@
   - 注册Bean
     - 生产者 DefaultMQProducer，设置各项配置，调用start方法。例：MQProducerConfig
     - 消费者 DefaultMQPushConsumer，设置各项配置，订阅指定的topic，调用start方法。例：MQConsumerConfig
+
 ### Sentinel
 - 文档
   - 官方文档 https://sentinelguard.io/zh-cn/docs/introduction.html
